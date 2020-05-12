@@ -1,0 +1,70 @@
+---
+- name: Ensure that dir for docker-compose exists
+  file:
+    path: "{{dc_path}}"
+    recurse: yes
+    state: directory
+  register: dir
+  tags:
+  - down
+  - restart
+  - deploy
+
+- name: docker-compose down
+  block:
+  - name: Ensure that docker-compose.yml exists
+    stat:
+      path: "{{dc_path}}/docker-compose.yml"
+    register: file
+
+  - name: docker-compose down
+    shell:
+      cmd: docker-compose down
+      chdir: "{{dc_path}}"
+    ignore_errors: yes
+    when: file.stat.exists
+  when: not dir.changed
+  tags:
+  - down
+  - restart
+  - deploy
+
+- name: Copy Dockerfile for flask
+  template:
+    src: "Dockerfile.j2"
+    dest: "{{dc_path}}/Dockerfile"
+  tags:
+  - deploy
+
+- name: Copy docker-compose.yml
+  template:
+    src: "docker-compose.yml.j2"
+    dest: "{{dc_path}}/docker-compose.yml"
+  tags:
+  - deploy
+
+- name: docker-compose up
+  shell:
+    cmd: docker-compose up -d --build
+    chdir: "{{dc_path}}"
+  tags:
+  - up
+  - restart
+
+- name: docker-compose ps
+  shell:
+    cmd: docker-compose ps
+    chdir: "{{dc_path}}"
+  register: ps
+  tags:
+  - up
+  - restart
+  - ps
+
+- name: Print docker-compose ps output
+  debug:
+    msg: "{{ps.stdout_lines}}"
+  tags:
+  - up
+  - restart
+  - ps

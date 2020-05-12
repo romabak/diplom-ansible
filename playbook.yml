@@ -1,0 +1,15 @@
+---
+- name: Docker up
+  hosts: DC
+  gather_facts: false
+
+  tasks:
+  - name: Deploy docker-compose
+    include_role:
+      name: start-services
+    tags:
+    - up
+    - down
+    - restart
+    - ps
+    - deploy
