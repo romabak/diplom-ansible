@@ -1,3 +1,8 @@
 ansible_host: 192.168.100.4
 ansible_user: roman
 dc_path: /home/roman/diplom/test-deploy
+
+mongo_uri: mongodb://localhost:27017/workers
+mongo_dbname: workers
+mongo_secret_key: 228_YA_R0B0T_EBAL_VSEH_V_ROT_1488_v0.001
+video_device: /dev/video0

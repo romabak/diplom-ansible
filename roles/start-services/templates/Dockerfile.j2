@@ -2,9 +2,9 @@ FROM rbakanouski/flask:torch
 
 WORKDIR /workzone
 
-RUN wget http://192.168.100.3:8079/repository/diplom/develops/flask/ci-docker-2020511/flask-ci-docker-2020511-104341.zip && \
-    unzip flask-ci-docker-2020511-104341.zip && \
-    rm flask-ci-docker-2020511-104341.zip && \
+RUN wget {{app_url}} && \
+    unzip {{app_url | basename}} && \
+    rm {{app_url | basename}} && \
     pip install --no-cache-dir --verbose -r requirements.txt
 
 CMD [ "python3", "run.py" ]

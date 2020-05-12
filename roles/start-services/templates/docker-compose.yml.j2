@@ -7,11 +7,11 @@ services:
     ports:
       - 1000:1000
     volumes:
-      - /dev/video0:/dev/video0
+      - {{video_device}}:/dev/video0
     environment:
-      - MONGO_URI=mongodb://localhost:27017/workers
-      - MONGO_DBNAME=workers
-      - SECRET_KEY=228_YA_R0B0T_EBAL_VSEH_V_ROT_1488_v0.001
+      - MONGO_URI={{mongo_uri}}
+      - MONGO_DBNAME={{mongo_dbname}}
+      - SECRET_KEY={{mongo_secret_key}}
   mongo:
     image: mongo:latest
     ports:
