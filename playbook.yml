@@ -13,3 +13,4 @@
     - restart
     - ps
     - deploy
+    - logs

@@ -68,3 +68,19 @@
   - up
   - restart
   - ps
+
+- name: docker-compose ps
+  shell:
+    cmd: docker-compose logs flask
+    chdir: "{{dc_path}}"
+  register: logs
+  tags:
+  - never
+  - logs
+
+- name: Print docker-compose ps output
+  debug:
+    msg: "{{logs.stdout_lines}}"
+  tags:
+  - never
+  - logs
