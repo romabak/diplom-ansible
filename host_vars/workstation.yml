@@ -1,8 +1,17 @@
 ansible_host: 192.168.100.4
 ansible_user: roman
 dc_path: /home/roman/diplom/test-deploy
+backup_name: db
 
-mongo_uri: mongodb://localhost:27017/workers
+flask_docker_container_name: flask-app
+flask_port: 1000
+
+mongodb_docker_container_name: mongodb
+
 mongo_dbname: workers
+mongo_port: 27017
+mongo_uri: mongodb://{{ansible_host}}:{{mongo_port}}/{{mongo_dbname}}
 mongo_secret_key: 228_YA_R0B0T_EBAL_VSEH_V_ROT_1488_v0.001
+
 video_device: /dev/video0
+# app_url: http://192.168.100.3:8079/repository/diplom/develops/flask/ci-docker-2020512/flask-ci-docker-2020512-072203.zip

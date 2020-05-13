@@ -1,0 +1,32 @@
+---
+- name: Ensure that dir for backup exists
+  file:
+    path: "{{dc_path}}/mongorestore"
+    state: directory
+
+- name: Started mongodb container
+  docker_container:
+    name: "{{mongodb_docker_container_name}}"
+    state: started
+
+- name: Unarchive
+  unarchive:
+    src: "{{inventory_dir}}/{{backup_name}}.zip"
+    dest: "{{dc_path}}/mongorestore"
+
+- name: Start mongorestore
+  docker_container:
+    name: mongorestore
+    image: mongo:latest
+    cleanup: yes
+    detach: false
+    volumes:
+    - "{{dc_path}}/mongorestore:/backup"
+    links:
+    - "{{mongodb_docker_container_name}}:mongodb"
+    command: "mongorestore -h mongodb --archive=/backup/{{backup_name}}.dump"
+
+- name: Remove backup-dirs
+  file:
+    path: "{{dc_path}}/mongorestore"
+    state: absent

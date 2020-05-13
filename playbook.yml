@@ -4,13 +4,15 @@
   gather_facts: false
 
   tasks:
-  - name: Deploy docker-compose
+  - name: Deploy project
     include_role:
-      name: start-services
+      name: flask-mongo
     tags:
-    - up
-    - down
-    - restart
-    - ps
-    - deploy
-    - logs
+    - rm-mongo
+    - stop-mongo
+    - start-mongo
+    - backup-mongo
+    - restore-mongo
+    - rm-flask
+    - stop-flask
+    - start-flask

@@ -1,0 +1,33 @@
+---
+- name: Present mongodb container
+  docker_container:
+    name: "{{mongodb_docker_container_name}}"
+    image: mongo:latest
+    ports:
+    - "{{mongo_port}}:27017"
+  tags:
+  - start-mongo
+
+- name: Restore mongo
+  import_tasks: mongorestore.yml
+  tags: [never, restore-mongo]
+
+- name: Stopped mongodb container
+  docker_container:
+    name: "{{mongodb_docker_container_name}}"
+    state: stopped
+  tags: [never, stop-mongo]
+
+- name: Remove container
+  block:
+  - name: Backup mongo
+    import_tasks: mongodump.yml
+  - name: Remove mongodb container
+    docker_container:
+      name: "{{mongodb_docker_container_name}}"
+      state: absent
+  tags: [never, rm-mongo]
+
+- name: Backup mongo
+  import_tasks: mongodump.yml
+  tags: [never, backup-mongo]

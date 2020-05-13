@@ -1,0 +1,23 @@
+---
+- name: Ensure that project dir exists
+  file:
+    path: "{{dc_path}}"
+    recurse: yes
+    state: directory
+
+- name: Mongo
+  include_tasks: mongo.yml
+  tags:
+  - rm-mongo
+  - stop-mongo
+  - start-mongo
+  - backup-mongo
+  - restore-mongo
+
+
+- name: Flask
+  include_tasks: flask.yml
+  tags:
+  - rm-flask
+  - stop-flask
+  - start-flask

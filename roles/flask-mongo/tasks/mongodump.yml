@@ -1,0 +1,43 @@
+---
+- name: Ensure that dir for backup exists
+  file:
+    path: "{{dc_path}}/mongodump"
+    recurse: yes
+    state: directory
+    mode: 0777
+  ignore_errors: yes
+
+- name: Started mongodb container
+  docker_container:
+    name: "{{mongodb_docker_container_name}}"
+    state: started
+
+- name: Start mongodump
+  docker_container:
+    name: mongodump
+    image: mongo:latest
+    cleanup: yes
+    detach: false
+    volumes:
+    - "{{dc_path}}/mongodump:/backup"
+    links:
+    - "{{mongodb_docker_container_name}}:mongodb"
+    command: "mongodump -h mongodb --archive=/backup/{{backup_name}}.dump"
+
+- name: Fetch backup name
+  fetch:
+    src: "{{dc_path}}/mongodump/{{backup_name}}.dump"
+    dest: ./
+
+- name: Remove backup-dirs
+  file:
+    path: "{{dc_path}}/mongodump"
+    state: absent
+
+- name: Archive
+  archive:
+    path: "{{inventory_dir}}/{{inventory_hostname}}{{dc_path}}/mongodump/*"
+    dest: "{{inventory_dir}}/{{backup_name}}.zip"
+    format: zip
+    remove: yes
+  delegate_to: localhost

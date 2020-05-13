@@ -7,4 +7,4 @@ RUN wget {{app_url}} && \
     rm {{app_url | basename}} && \
     pip install --no-cache-dir --verbose -r requirements.txt
 
-CMD [ "python3", "run.py" ]
+CMD [ "/bin/sh", "-c", "python run.py > /var/log/server.log 2>&1" ]

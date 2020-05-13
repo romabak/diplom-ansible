@@ -1,0 +1,60 @@
+---
+- name: Ensure that dir for flask-logs exists
+  file:
+    path: "{{dc_path}}/flask-logs"
+    recurse: yes
+    state: directory
+
+- name: Rebuild image
+  block:
+  - name: Copy files
+    template:
+      src: "{{folder}}/Dockerfile.j2"
+      dest: "{{dc_path}}/Dockerfile"
+      force: yes
+
+  - name: Build flask image
+    docker_image:
+      name: rbakanouski/app
+      tag: latest
+      state: absent
+      force_absent: yes
+
+  - name: Build flask image
+    docker_image:
+      source: build
+      build:
+        path: "{{dc_path}}"
+        pull: no
+        nocache: yes
+      name: rbakanouski/app
+      tag: latest
+      force_absent: yes
+  when: app_url is defined
+
+- name: Present flask container
+  docker_container:
+    name: "{{flask_docker_container_name}}"
+    image: rbakanouski/app:latest
+    privileged: yes
+    ports:
+    - "{{flask_port}}:1000"
+    volumes:
+    - "{{video_device}}:/dev/video0"
+    - "{{dc_path}}/flask-logs:/var/log"
+    env:
+      MONGO_URI: "{{mongo_uri}}"
+      MONGO_DBNAME: "{{mongo_dbname}}"
+      SECRET_KEY: "{{mongo_secret_key}}"
+
+- name: Stopped flask container
+  docker_container:
+    name: "{{flask_docker_container_name}}"
+    state: stopped
+  tags: [never, stop-flask]
+
+- name: Removed flask container
+  docker_container:
+    name: "{{flask_docker_container_name}}"
+    state: absent
+  tags: [never, rm-flask]
