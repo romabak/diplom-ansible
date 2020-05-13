@@ -4,6 +4,8 @@
     path: "{{dc_path}}/flask-logs"
     recurse: yes
     state: directory
+  tags:
+  - start-flask
 
 - name: Rebuild image
   block:
@@ -46,6 +48,8 @@
       MONGO_URI: "{{mongo_uri}}"
       MONGO_DBNAME: "{{mongo_dbname}}"
       SECRET_KEY: "{{mongo_secret_key}}"
+  tags:
+  - start-flask
 
 - name: Stopped flask container
   docker_container:
