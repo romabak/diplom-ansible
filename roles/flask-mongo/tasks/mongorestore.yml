@@ -11,7 +11,7 @@
 
 - name: Unarchive
   unarchive:
-    src: "{{inventory_dir}}/{{backup_name}}.zip"
+    src: "{{inventory_dir}}/{{restore_name}}.zip"
     dest: "{{dc_path}}/mongorestore"
 
 - name: Start mongorestore
