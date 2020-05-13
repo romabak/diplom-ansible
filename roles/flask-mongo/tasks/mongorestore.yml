@@ -24,7 +24,7 @@
     - "{{dc_path}}/mongorestore:/backup"
     links:
     - "{{mongodb_docker_container_name}}:mongodb"
-    command: "mongorestore -h mongodb --archive=/backup/{{backup_name}}.dump"
+    command: "mongorestore -h mongodb --archive=/backup/{{inventory_hostname}}.dump"
 
 - name: Remove backup-dirs
   file:

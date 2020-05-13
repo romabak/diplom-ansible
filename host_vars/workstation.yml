@@ -1,7 +1,6 @@
 ansible_host: 192.168.100.4
 ansible_user: roman
 dc_path: /home/roman/diplom/test-deploy
-backup_name: db
 
 flask_docker_container_name: flask-app
 flask_port: 1000

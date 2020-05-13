@@ -22,11 +22,11 @@
     - "{{dc_path}}/mongodump:/backup"
     links:
     - "{{mongodb_docker_container_name}}:mongodb"
-    command: "mongodump -h mongodb --archive=/backup/{{backup_name}}.dump"
+    command: "mongodump -h mongodb --archive=/backup/{{inventory_hostname}}.dump"
 
 - name: Fetch backup name
   fetch:
-    src: "{{dc_path}}/mongodump/{{backup_name}}.dump"
+    src: "{{dc_path}}/mongodump/{{inventory_hostname}}.dump"
     dest: ./
 
 - name: Remove backup-dirs
@@ -37,7 +37,7 @@
 - name: Archive
   archive:
     path: "{{inventory_dir}}/{{inventory_hostname}}{{dc_path}}/mongodump/*"
-    dest: "{{inventory_dir}}/{{backup_name}}.zip"
+    dest: "{{inventory_dir}}/{{inventory_hostname}}.zip"
     format: zip
     remove: yes
   delegate_to: localhost
