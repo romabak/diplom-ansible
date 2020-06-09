@@ -1,4 +1,4 @@
-ansible_host: 192.168.229.10
+ansible_host: 192.168.229.11
 ansible_user: vagrant
 dc_path: /home/vagrant/diplom/test-deploy
 
