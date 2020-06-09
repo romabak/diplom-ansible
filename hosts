@@ -1,5 +1,2 @@
-[Environment]
-workstation-1
-workstation-2
-workstation-3
-workstation-4
+[DC]
+workstation

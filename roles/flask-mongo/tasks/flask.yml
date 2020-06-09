@@ -23,7 +23,7 @@
   block:
   - name: Copy files
     template:
-      src: "{{folder}}/Dockerfile.j2"
+      src: "Dockerfile.j2"
       dest: "{{dc_path}}/Dockerfile"
       force: yes
 
@@ -45,6 +45,8 @@
       tag: latest
       force_absent: yes
   when: app_url is defined
+  tags:
+  - start-flask
 
 - name: Present flask container
   docker_container:
