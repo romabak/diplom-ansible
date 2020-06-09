@@ -7,6 +7,18 @@
   tags:
   - start-flask
 
+- name: Stopped flask container
+  docker_container:
+    name: "{{flask_docker_container_name}}"
+    state: stopped
+  tags: [never, stop-flask]
+
+- name: Removed flask container
+  docker_container:
+    name: "{{flask_docker_container_name}}"
+    state: absent
+  tags: [never, rm-flask]
+
 - name: Rebuild image
   block:
   - name: Copy files
@@ -15,7 +27,7 @@
       dest: "{{dc_path}}/Dockerfile"
       force: yes
 
-  - name: Build flask image
+  - name: Delete flask image
     docker_image:
       name: rbakanouski/app
       tag: latest
@@ -50,15 +62,3 @@
       SECRET_KEY: "{{mongo_secret_key}}"
   tags:
   - start-flask
-
-- name: Stopped flask container
-  docker_container:
-    name: "{{flask_docker_container_name}}"
-    state: stopped
-  tags: [never, stop-flask]
-
-- name: Removed flask container
-  docker_container:
-    name: "{{flask_docker_container_name}}"
-    state: absent
-  tags: [never, rm-flask]
